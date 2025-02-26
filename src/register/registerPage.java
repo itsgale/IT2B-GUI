@@ -1,0 +1,403 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package register;
+
+import config.dbConnector;
+import dashBoard.loginPage;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author user
+ */
+public class registerPage extends javax.swing.JFrame {
+
+    /**
+     * Creates new form registerPage
+     */
+    public registerPage() {
+        initComponents();
+    }
+    
+
+   private boolean validateFields() {
+        // 1. Check if required fields are empty
+        if (fn.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "First Name cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (ln.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Last Name cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (email.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Email cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (userc.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Username cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (passc.getPassword().length == 0) {
+            JOptionPane.showMessageDialog(this, "Password cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // 2. Password should have at least 8 characters
+        if (new String(passc.getPassword()).length() < 8) {
+            JOptionPane.showMessageDialog(this, "Password must have at least 8 characters.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // 3. Validate email format
+        if (!isValidEmail(email.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Invalid email format.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // 4. Check if email and username are duplicates
+        if (isDuplicateEmail(email.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Email already exists. Please use a different email.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (isDuplicateUsername(userc.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // If all validations pass
+        return true;
+    }
+
+// Helper method to validate email format
+private boolean isValidEmail(String email) {
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    return Pattern.compile(emailRegex).matcher(email).matches();
+}
+
+    private boolean isDuplicateEmail(String email) {
+        dbConnector dbc = new dbConnector();
+        String query = "SELECT * FROM tbl_user WHERE user_email = ?";
+        try (Connection conn = dbc.getConnection();
+            PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            return rs.next(); // Returns true if a duplicate email is found
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database error while checking email.", "Error", JOptionPane.ERROR_MESSAGE);
+            return true; // Assume duplicate to prevent further issues
+        }
+    }
+    
+    private boolean isDuplicateUsername(String username) {
+        dbConnector dbc = new dbConnector();
+        String query = "SELECT * FROM tbl_user WHERE user_userc = ?";
+        try (Connection conn = dbc.getConnection();
+            PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setString(1, username);
+            ResultSet rs = pst.executeQuery();
+            return rs.next(); // Returns true if a duplicate username is found
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database error while checking username.", "Error", JOptionPane.ERROR_MESSAGE);
+            return true; // Assume duplicate to prevent further issues
+        }
+    }
+
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        header = new javax.swing.JPanel();
+        title = new javax.swing.JLabel();
+        login = new javax.swing.JPanel();
+        addressPane = new javax.swing.JPanel();
+        registerPane = new javax.swing.JPanel();
+        fn = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
+        userc = new javax.swing.JTextField();
+        loginLbl = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        ln = new javax.swing.JTextField();
+        passc = new javax.swing.JPasswordField();
+        jLabel7 = new javax.swing.JLabel();
+        registerButton = new javax.swing.JButton();
+        cancel = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(27, 27, 27));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        header.setBackground(new java.awt.Color(27, 27, 27));
+        header.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        title.setBackground(new java.awt.Color(27, 27, 27));
+        title.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        title.setForeground(new java.awt.Color(255, 255, 255));
+        title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        title.setText("WELCOME TO MY SYSTEM!");
+        title.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                titleMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                titleMouseExited(evt);
+            }
+        });
+        header.add(title, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 1030, 30));
+
+        jPanel1.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 1040, 60));
+
+        login.setBackground(new java.awt.Color(25, 25, 25));
+        login.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        addressPane.setBackground(new java.awt.Color(25, 25, 25));
+        addressPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        registerPane.setBackground(new java.awt.Color(25, 25, 25));
+        registerPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        addressPane.add(registerPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, 140, 60));
+
+        login.add(addressPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, 320, 70));
+
+        fn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fnActionPerformed(evt);
+            }
+        });
+        login.add(fn, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, 320, 40));
+
+        email.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emailActionPerformed(evt);
+            }
+        });
+        login.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 330, 320, 40));
+
+        userc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usercActionPerformed(evt);
+            }
+        });
+        login.add(userc, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 320, 40));
+
+        loginLbl.setFont(new java.awt.Font("Arial Black", 3, 24)); // NOI18N
+        loginLbl.setForeground(new java.awt.Color(255, 255, 255));
+        loginLbl.setText("Registration Form");
+        login.add(loginLbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 40, 260, 60));
+
+        jLabel4.setFont(new java.awt.Font("Century Gothic", 2, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("First Name:");
+        login.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, 80, -1));
+
+        jLabel6.setFont(new java.awt.Font("Century Gothic", 2, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Last Name:");
+        login.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 140, 80, -1));
+
+        jLabel3.setFont(new java.awt.Font("Century Gothic", 2, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Username:");
+        login.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 80, -1));
+
+        jLabel2.setFont(new java.awt.Font("Century Gothic", 2, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Password:");
+        login.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 220, 80, -1));
+
+        jLabel5.setFont(new java.awt.Font("Century Gothic", 2, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Email:");
+        login.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 310, 80, -1));
+
+        ln.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lnActionPerformed(evt);
+            }
+        });
+        login.add(ln, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, 320, 40));
+        login.add(passc, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 240, 320, 40));
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/chef.png"))); // NOI18N
+        login.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, 220));
+
+        registerButton.setText("Register");
+        registerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerButtonActionPerformed(evt);
+            }
+        });
+        login.add(registerButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 410, 90, -1));
+
+        cancel.setText("Cancel");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelActionPerformed(evt);
+            }
+        });
+        login.add(cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 410, 90, -1));
+
+        jPanel1.add(login, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1030, 520));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void titleMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_titleMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_titleMouseEntered
+
+    private void titleMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_titleMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_titleMouseExited
+
+    private void lnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lnActionPerformed
+
+    private void usercActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usercActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usercActionPerformed
+
+    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emailActionPerformed
+
+    private void fnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fnActionPerformed
+
+    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
+            // Validate fields before proceeding
+        if (validateFields()) {
+            dbConnector dbc = new dbConnector();
+
+            // Use a prepared statement to avoid SQL injection
+            String query = "INSERT INTO tbl_user (user_fn, user_ln, user_userc, user_passc, user_email, status, type) "
+                         + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            try (Connection conn = dbc.getConnection();
+                 PreparedStatement pst = conn.prepareStatement(query)) {
+
+                // Set values for the prepared statement
+                pst.setString(1, fn.getText());               // First Name
+                pst.setString(2, ln.getText());               // Last Name
+                pst.setString(3, userc.getText());            // Username
+                pst.setString(4, new String(passc.getPassword())); // Password
+                pst.setString(5, email.getText());            // Email
+                pst.setString(6, "PENDING");                  // Status
+                pst.setString(7, "User");                  // Status
+
+
+                // Execute the query
+                int rowsInserted = pst.executeUpdate();
+
+                if (rowsInserted > 0) {
+                    JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose(); // Close the current window
+                    new loginPage().setVisible(true); // Open the login page
+                } else {
+                    JOptionPane.showMessageDialog(this, "Registration failed!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_registerButtonActionPerformed
+
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        this.dispose(); // Close the current window
+        
+    }//GEN-LAST:event_cancelActionPerformed
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(registerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(registerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(registerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(registerPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new registerPage().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel addressPane;
+    private javax.swing.JButton cancel;
+    private javax.swing.JTextField email;
+    private javax.swing.JTextField fn;
+    private javax.swing.JPanel header;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField ln;
+    private javax.swing.JPanel login;
+    private javax.swing.JLabel loginLbl;
+    private javax.swing.JPasswordField passc;
+    private javax.swing.JButton registerButton;
+    private javax.swing.JPanel registerPane;
+    private javax.swing.JLabel title;
+    private javax.swing.JTextField userc;
+    // End of variables declaration//GEN-END:variables
+}
